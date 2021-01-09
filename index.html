@@ -25,17 +25,8 @@
 	    </button>
 	    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
 	      <ul class="navbar-nav">
-	      	 <li class="nav-item">
-	          <a class="nav-link" href="#"  @click.prevent="set_p_screen('s_head')">Главная</a>
-	        </li>
-	        <li class="nav-item">
-	          <a class="nav-link" href="#"  @click.prevent="set_p_screen('s_about_us')">О нас</a>
-	        </li>
-	        <li class="nav-item">
-	          <a class="nav-link" href="#"  @click.prevent="set_p_screen('s_services')">Услуги</a>
-	        </li>
-	        <li class="nav-item">
-	          <a class="nav-link" href="#"  @click.prevent="set_p_screen('s_contacts')">Контакты</a>
+	      	<li class="nav-item" v-for="item in p_screen" >
+	          <a class="nav-link" href="#"  @click.prevent="set_p_screen(item.name)">{{item.title}}</a>
 	        </li>
 	      </ul>
 	    </div>
@@ -60,8 +51,10 @@
 					<div class="stack-slider">
 						<div class="stacks-wrapper">
 
+							<!--первый список фото-->
 							<div class="stack">
 								<h2 class="stack-title"><a href="#" data-text="Portraits Name 1"><span>Portraits Name 1</span></a></h2>
+								<!--первое изображение-->
 								<div class="item">
 									<div class="item__content">
 										<img src="img/gl/gl1.jpg" alt="img01" />
@@ -77,6 +70,7 @@
 										</div>
 									</div>
 								</div>
+								<!--конец первое изображение-->
 								<div class="item">
 									<div class="item__content">
 										<img src="img/gl/gl2.jpg" alt="img02" />
@@ -108,7 +102,9 @@
 									</div>
 								</div>
 							</div>
+							<!--конец первый список фото-->
 
+							<!--второй список фото-->
 							<div class="stack">
 								<h2 class="stack-title"><a href="#" data-text="Portraits Name 2"><span>Portraits Name 2</span></a></h2>
 								<div class="item">
@@ -157,11 +153,10 @@
 									</div>
 								</div>
 							</div>
+							<!--конец второй список фото-->
 
 						</div>
-						
 					</div>
-					
 					<img class="loader" src="img/three-dots.svg" width="60" alt="Loader image" />
 				</div> 
 				<!-- end first screen -->
@@ -230,25 +225,43 @@
 		</div>
 	</section>
 
+	<section class="page__screen store" :class="{page__screen_active:p_screen.s_store.screen}">
+		<div class="container ptb100">
+			<h2 class="text-center">Магазин</h2>
+				<div class="row">
+					<div class="col col-12 col-sm-12 col-md-6 col-lg-4" v-for="item in cards">
+						<div class="store_card">
+							<img :src="item.img" :alt="item.title">
+					    <div class="content">
+					      <h2 class="title">{{item.title}}</h2>
+					      <p class="copy">{{item.copy}}</p>
+					      <button class="btn" data-toggle="modal" data-target="#exampleModal" @click.prevent="card_order_title = item.title">Заказать</button>
+					    </div>
+					  </div>
+					</div>
+				</div>
+		</div>
+	</section>
+	
 	<section class="page__screen" :class="{page__screen_active:p_screen.s_contacts.screen}">
 		<section class="contacts">
 			<div class="container ptb100">
 				<h2 class="text-center">Контакты</h2>
 
-				<form class="feedback">
+				<form action="" class="feedback">
 				  <div class="mb-3">
 				    <label for="exampleInputphone" class="form-label">Номер телефона</label>
-				    <input type="tel" class="form-control" id="exampleInputphone" aria-describedby="emailHelp" placeholder="8(800)-000-00-00">
+				    <input type="tel" v-model="form.phone" class="form-control" id="exampleInputphone" aria-describedby="emailHelp" placeholder="8(800)-000-00-00">
 				  </div>
 				  <div class="mb-3">
 				    <label for="exampleInputText" class="form-label">Сообщение</label>
-				    <textarea id="exampleInputPassword1" class="form-control" aria-label="With textarea" placeholder="Текст сообщения"></textarea>
+				    <textarea id="exampleInputPassword1" v-model="form.message" class="form-control" aria-label="With textarea" placeholder="Текст сообщения"></textarea>
 				  </div>
 				  <div class="mb-3 form-check">
 				    <input type="checkbox" class="form-check-input" id="exampleCheck1"  @click="disabled = !disabled">
 				    <label class="form-check-label" for="exampleCheck1">Согласие на обработку персональных данных</label>
 				  </div>
-				  <button type="submit" class="btn btn-dark" :disabled='disabled'>Отправить</button>
+				  <button type="submit" class="btn btn-dark" :disabled='disabled' @click.prevent="send2">Отправить</button>
 				</form>
 
 				<div class="row align-items-center mt-3">
@@ -285,8 +298,8 @@
 					<div class="col-12 col-sm-12 col-md-6 col-lg-auto">
 						<a href="#">Политика Конфиденциальности</a>
 					</div>
-					<div class="col-12 col-sm-12 col-md-6 col-lg-auto">
-						<a href="">сайт разработан develp.ru</a>
+					<div class="col-12 col-sm-12 col-md col-lg text-right">
+						<a href="#"><img src="img/logo.svg" alt="Сайт разработан командой develp" width="90px"></a>
 					</div>
 				</div>
 			</div>
@@ -297,12 +310,40 @@
 		<span class="dot" v-for="item in p_screen" :class="{active:item.screen}" @click.prevent="set_p_screen(item.name)"></span>
 		<i class="fas fa-chevron-down" @click.prevent="screen_down"></i>
 	</div>
+
+	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="exampleModalLabel">{{card_order_title}}</h5>
+	      </div>
+	      <form action="">
+		      <div class="modal-body">
+		        <div class="mb-3">
+					    <label for="exampleInputphone" class="form-label">Номер телефона</label>
+					    <input v-model="phone" type="tel" class="form-control" id="exampleInputphone" aria-describedby="emailHelp" placeholder="8(800)-000-00-00">
+					  </div>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+		        <button type="submit" class="btn btn-primary" data-dismiss="modal" @click.prevent="send">Заказать</button>
+		      </div>
+	    	</form>
+	    </div>
+	  </div>
+	</div>
+
+	<div class="message" v-if="message_show">
+		{{message_text}}
+	</div>
+
 </div>
 
 <script src="js/bootstrap.min.js"></script>
 <script src="js/flickity.pkgd.min.js"></script>
 <script src="js/smoothscroll.js"></script>
 <script src="js/vue.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="js/main.js"></script>
 
 

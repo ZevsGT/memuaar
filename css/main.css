@@ -10,6 +10,13 @@
 	font-style: normal;
 }
 
+:root {
+  --d: 700ms;
+  --e: cubic-bezier(0.19, 1, 0.22, 1);
+  --font-sans: "Rubik", sans-serif;
+  --font-serif: "Cardo", serif;
+}
+
 *,
 *:after,
 *:before {
@@ -861,6 +868,11 @@ button:focus {
 	margin-bottom: 20%;
 }
 
+.store {
+	background-color: #fff;
+	color: #000;
+}
+
 .contacts {
 	background-color: #fff;
 	color: #000;
@@ -903,23 +915,158 @@ footer {
 	/*height: 50px;*/
 }
 
-/*
-footer::after {
-	content: "";
-	background-color: #000;
-	border-radius: 50%;
-	position: relative;
-	display: block;
-	width: 110%;
-	height: 200px;
-	z-index: 0;
-	transform: translate(-5% ,-70% );
+.modal {
+	color: #212529;
 }
 
-footer .container {
-	position: relative;
-	z-index: 1;
-}*/
+.message {
+	background-color: rgba(0,0,0, .6);
+	position: fixed;
+	top: 70px;
+	right: 40px;
+	z-index: 3;
+	padding: 1rem;
+	color: #fff;
+}
+
+.store .col {
+	padding: 1rem;
+}
+
+
+.store_card {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  padding: 1rem;
+  width: 100%;
+  text-align: center;
+  color: whitesmoke;
+  background-color: whitesmoke;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1), 0 2px 2px rgba(0, 0, 0, 0.1), 0 4px 4px rgba(0, 0, 0, 0.1), 0 8px 8px rgba(0, 0, 0, 0.1), 0 16px 16px rgba(0, 0, 0, 0.1);
+}
+@media (min-width: 600px) {
+  .store_card {
+    height: 400px;
+  }
+}
+.store_card img {
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 110%;
+  background-size: cover;
+  background-position: 0 0;
+  transition: transform calc(var(--d) * 1.5) var(--e);
+  pointer-events: none;
+}
+.store_card:after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 200%;
+  pointer-events: none;
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.009) 11.7%, rgba(0, 0, 0, 0.034) 22.1%, rgba(0, 0, 0, 0.072) 31.2%, rgba(0, 0, 0, 0.123) 39.4%, rgba(0, 0, 0, 0.182) 46.6%, rgba(0, 0, 0, 0.249) 53.1%, rgba(0, 0, 0, 0.32) 58.9%, rgba(0, 0, 0, 0.394) 64.3%, rgba(0, 0, 0, 0.468) 69.3%, rgba(0, 0, 0, 0.54) 74.1%, rgba(0, 0, 0, 0.607) 78.8%, rgba(0, 0, 0, 0.668) 83.6%, rgba(0, 0, 0, 0.721) 88.7%, rgba(0, 0, 0, 0.762) 94.1%, rgba(0, 0, 0, 0.79) 100%);
+  transform: translateY(-50%);
+  transition: transform calc(var(--d) * 2) var(--e);
+}
+
+.store_card .content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 1rem;
+  transition: transform var(--d) var(--e);
+  z-index: 1;
+}
+.store_card .content > * + * {
+  margin-top: 1rem;
+}
+
+.store_card .title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+.store_card .copy {
+  font-family: var(--font-serif);
+  font-size: 1.125rem;
+  line-height: 1.35;
+}
+
+.store_card .btn {
+  cursor: pointer;
+  margin-top: 1.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.65rem;
+  font-weight: bold;
+  letter-spacing: 0.025rem;
+  text-transform: uppercase;
+  color: #000;
+  background-color: rgba(256,256,256,.7);
+  border: none;
+  transition: .2s;
+}
+.store_card .btn:hover {
+  background-color: rgba(256,256,256,.5);
+}
+.store_card .btn:focus {
+  background-color: rgba(256,256,256,.8);
+}
+
+@media (hover: hover) and (min-width: 600px) {
+  .store_card:after {
+    transform: translateY(0);
+  }
+
+  .store_card .content {
+    transform: translateY(calc(100% - 4.5rem));
+  }
+  .store_card .content > *:not(.title) {
+    opacity: 0;
+    transform: translateY(1rem);
+    transition: transform var(--d) var(--e), opacity var(--d) var(--e);
+  }
+
+  .store_card:hover,
+.store_card:focus-within {
+    align-items: center;
+  }
+  .store_card:hover img,
+.store_card:focus-within img {
+    transform: translateY(-4%);
+  }
+  .store_card:hover:after,
+.store_card:focus-within:after {
+    transform: translateY(-50%);
+  }
+  .store_card:hover .content,
+.store_card:focus-within .content {
+    transform: translateY(0);
+  }
+  .store_card:hover .content > *:not(.title),
+.store_card:focus-within .content > *:not(.title) {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: calc(var(--d) / 8);
+  }
+
+  .store_card:focus-within img, .store_card:focus-within:after,
+.store_card:focus-within .content,
+.store_card:focus-within .content > *:not(.title) {
+    transition-duration: 0s;
+  }
+}
+
 
 /* Mobile-first media queries */
 @media screen and (min-width: 65em) {

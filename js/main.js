@@ -8,27 +8,79 @@
 	   	disabled: true,
 	   	bodyEl: document.body,
 	   	t: null,
+	   	card_order_title: null,
+	   	phone: null,
+	   	message_show: false,
+	   	message_text: null,
+	   	form: {
+	   		phone: null,
+	   		message: null,
+	   	},
+	   	
+
+
+
+
+	   	//карточки магазина
+	   	cards: {
+	   		
+	   		card1:{
+	   			title: "Название 1",
+	   			copy: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eos, maiores enim, iste, eum ab, laudantium sunt asperiores cum tenetur velit adipisci aperiam ipsum pariatur iure est atque facilis quo eveniet.",
+	   			img: "http://andrey-eltsov.ru/wp-content/uploads/2019/01/Ss-Ss-17_dhyG_h6_dhE-3Ko_fj-4U-F_2hySDkF-g_dh7-%D0%9E%D0%B1%D0%BE%D0%B8-%D0%A1%D0%B0%D1%82%D1%83%D1%80%D0%BD.jpg",
+	   		},
+
+	   		card2:{
+	   			title: "Название 2",
+	   			copy: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eos, maiores enim, iste, eum ab, laudantium sunt asperiores cum tenetur velit adipisci aperiam ipsum pariatur iure est atque facilis quo eveniet. ",
+	   			img: "https://pbs.twimg.com/media/Dr4M7ukW4AIGF3q.jpg:large",
+	   		},
+
+	   		card3:{
+	   			title: "Название 3",
+	   			copy: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eos, maiores enim, iste, eum ab, laudantium sunt asperiores cum tenetur velit adipisci aperiam ipsum pariatur iure est atque facilis quo eveniet.",
+	   			img: "https://img2.akspic.ru/image/144752-nebo-atmosfera-rozovyj-kosmos-purpur-1080x1920.jpg",
+	   		},
+
+	   	},
+	   	//конец карточки магазина
+
+
+
+
+
 	   	p_screen: {
 	   		s_head: {
 	   			name: "s_head",
+	   			title: 'Главная',
 	   			screen: true,
 	   			s_navbar_theme: "navbar-dark navbar-bg-none",
 	   			s_dot_theme: "dotsbar-dark",
 	   		},
 	   		s_about_us: {
 	   			name: "s_about_us",
+	   			title: 'О нас',
 	   			screen: false,
 	   			s_navbar_theme: "navbar-dark",
 	   			s_dot_theme: "dotsbar-dark",
 	   		},
 	   		s_services: {
 	   			name: "s_services",
+	   			title: 'Услуги',
 	   			screen: false,
 	   			s_navbar_theme: "navbar-dark navbar-bg-none",
 	   			s_dot_theme: "dotsbar-dark",
 	   		},
+	   		s_store: {
+	   			name: "s_store",
+	   			title: 'Магазин',
+	   			screen: false,
+	   			s_navbar_theme: "navbar-light",
+	   			s_dot_theme: "dotsbar-light",
+	   		},
 	   		s_contacts: {
 	   			name: "s_contacts",
+	   			title: 'Контакты',
 	   			screen: false,
 	   			s_navbar_theme: "navbar-light",
 	   			s_dot_theme: "dotsbar-light",
@@ -84,6 +136,57 @@
 				});
 		 },
 	   methods: {
+	   	send: function(){
+	   		if(this.phone != null){
+		   		axios.post('/send.php', {
+		   			order: this.card_order_title,
+		   			phone: this.phone
+		   		})
+			    .then(response => {
+			    	this.message_text = response.data;
+			    	this.message_show = true;
+			    	setTimeout(()=>{
+			   			this.message_show = false;
+			   		},3000);
+			    })
+			    .catch(error => {
+			    console.log(error)
+			    this.errored = true
+			    })
+		  	}else {
+		  		this.message_text = "Ошибка: Введите номер телефона!";
+		    	this.message_show = true;
+		    	setTimeout(()=>{
+		   			this.message_show = false;
+		   		},3000);
+		  	}
+	   	},
+	   	send2: function(){
+	   		if(this.form.phone != null){
+		   		axios.post('/send.php', {
+		   			contacts: true,
+		   			phone: this.form.phone,
+		   			message: this.form.message,
+		   		})
+			    .then(response => {
+			    	this.message_text = response.data;
+			    	this.message_show = true;
+			    	setTimeout(()=>{
+			   			this.message_show = false;
+			   		},5000);
+			    })
+			    .catch(error => {
+			    console.log(error)
+			    this.errored = true
+			    })
+		  	}else {
+		  		this.message_text = "Ошибка: Введите номер телефона!";
+		    	this.message_show = true;
+		    	setTimeout(()=>{
+		   			this.message_show = false;
+		   		},5000);
+		  	}
+	   	},
 	   	set_p_screen: function(set_screen){
 	   		if(this.p_screen[set_screen] != true){
 		   		for(var screen in this.p_screen){
